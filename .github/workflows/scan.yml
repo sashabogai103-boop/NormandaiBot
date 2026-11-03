@@ -2,10 +2,9 @@ name: signal-scan
 
 on:
   schedule:
-    - cron: "*/30 * * * *"   # каждые 30 минут запускается «смена» бота
-  workflow_dispatch: {}      # ручной запуск кнопкой "Run workflow"
+    - cron: "*/30 * * * *"
+  workflow_dispatch: {}
 
-# Одна смена работает ~55 минут, следующая ждёт своей очереди и подхватывает.
 concurrency:
   group: scan
   cancel-in-progress: false
@@ -37,6 +36,8 @@ jobs:
           TG_TOKEN: ${{ secrets.TG_TOKEN }}
           TG_CHAT: ${{ secrets.TG_CHAT }}
           RUN_SECONDS: "3300"
+          PYTHONUNBUFFERED: "1"
+
         run: python scanner.py
 
       - name: Сохранить память бота
